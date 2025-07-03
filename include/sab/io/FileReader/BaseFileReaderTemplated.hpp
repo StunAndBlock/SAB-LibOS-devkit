@@ -4,31 +4,26 @@
 #include "io/IOCommon.hpp"
 
 namespace sab::ioos {
+    namespace Status {
+        enum class BaseFileReaderTemplated {
+            OK,
+            CLOSE_ERROR_FILE_NOT_OPENED,
+            OPEN_ERROR,
+        };
+    }
     template<typename CharT>
-    class BaseFileReaderTemplated;
-    
-    enum class Status {
-        OK,
-        CLOSE_ERROR_FILE_NOT_OPENED,
-        OPEN_ERROR,
-    };
-
-
-    
-    template<typename CharT>
-    class BaseFileReaderTemplated : public sab::StatusMixin<BaseFileReaderTemplated<CharT>> {
+    class BaseFileReaderTemplated : public sab::StatusMixin<Status::BaseFileReaderTemplated> {
         protected:
             std::basic_ifstream<CharT> file_;  
-        
+            using Status = Status::BaseFileReaderTemplated;
         public:
-            using StatusEnum = Status;
             virtual ~BaseFileReaderTemplated() = default;
             BaseFileReaderTemplated() = default;
             BaseFileReaderTemplated(const BaseFileReaderTemplated&) = delete;
             BaseFileReaderTemplated& operator=(const BaseFileReaderTemplated&) = delete;
 
-            BaseFileReaderTemplated(BaseFileReaderTemplated&&) noexcept;
-            BaseFileReaderTemplated& operator=(BaseFileReaderTemplated&&) noexcept;
+            BaseFileReaderTemplated(BaseFileReaderTemplated<CharT>&&) noexcept;
+            BaseFileReaderTemplated& operator=(BaseFileReaderTemplated<CharT>&&) noexcept;
 
             virtual void open(const CharT*) = 0;
             virtual void open(const std::basic_string<CharT>&) = 0;
@@ -37,13 +32,14 @@ namespace sab::ioos {
     }; 
 
     template<typename CharT>
-    BaseFileReaderTemplated<CharT>::BaseFileReaderTemplated(BaseFileReaderTemplated&& source) noexcept 
+    BaseFileReaderTemplated<CharT>::BaseFileReaderTemplated(
+        BaseFileReaderTemplated<CharT>&& source) noexcept
         : file_(std::move(source.file_)) {
         this->status_ = source.status_;
     }
-
     template<typename CharT>
-    BaseFileReaderTemplated<CharT>& BaseFileReaderTemplated<CharT>::operator=(BaseFileReaderTemplated&& rhs) noexcept {
+    BaseFileReaderTemplated<CharT>& BaseFileReaderTemplated<CharT>::operator=(
+        BaseFileReaderTemplated<CharT>&& rhs) noexcept {
         if (this != &rhs) {
             file_ = std::move(rhs.file_);
             this->status_ = rhs.status_;
