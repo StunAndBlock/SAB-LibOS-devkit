@@ -148,9 +148,9 @@ LDFLAGS =
 
 ## <modular system>
 MMAIN = main.cpp
-MIOFILEREADER = io/FileReader/*.cpp sab/io/FileReader/*.hpp 
-MIOFILEREADERTEXT = io/FileReader/Text/*.cpp sab/io/FileReader/Text/*.hpp 
-MODULES = $(MMAIN)
+MIOFILEREADER = io/FileReader/BaseFileReader.cpp io/FileReader/*.hpp 
+MIOFILEREADERTEXT = io/FileReader/Text/TextFileReader.cpp io/FileReader/Text/*.hpp 
+MODULES = $(MMAIN) $(MIOFILEREADER) $(MIOFILEREADERTEXT)
 #### DO NOT TOUCH
 CPP = $(addprefix $(SRC_PATH),$(filter %.cpp,$(MODULES)))
 HEADERS = $(addprefix $(INCLUDE_PATH),$(filter %.hpp %.h,$(MODULES)))
@@ -159,11 +159,11 @@ OBJECTS = $(patsubst %.cpp,%.o,$(CPP))
 
 
 ## <Make main system>
-.PHONY: all clean build
+.PHONY: all clean target
 
-all: build
+all: target
 
-build: $(OBJECTS) | $(BUILD_DIR)
+target: $(OBJECTS) | $(BUILD_DIR)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $(BUILD_DIR)/$(TARGET)  
 
 ### do not touch dynamic object compilation
@@ -176,7 +176,7 @@ clean:
 
 ### build dir ensurance
 $(BUILD_DIR):
-	mkdir -p  $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)
 
 
 # !<>
