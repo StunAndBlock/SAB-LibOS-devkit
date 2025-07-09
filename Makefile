@@ -130,7 +130,7 @@ TARGET = name.$(EXECUTABLE_PREFIX)
 BUILD_DIR = build
 INCLUDE_DIR = include/sab
 INCLUDE_PATH = $(INCLUDE_DIR)/
-EXTERNAL_DIR = external/include
+EXTERNAL_DIR = ext/include
 EXTERNAL_PATH = $(EXTERNAL_DIR)/
 SRC_DIR = src
 SRC_PATH = $(SRC_DIR)/
@@ -148,9 +148,12 @@ LDFLAGS =
 
 ## <modular system>
 MMAIN = main.cpp
-MIOFILEREADER = io/FileReader/BaseFileReader.cpp io/FileReader/*.hpp 
-MIOFILEREADERTEXT = io/FileReader/Text/TextFileReader.cpp io/FileReader/Text/*.hpp 
-MODULES = $(MMAIN) $(MIOFILEREADER) $(MIOFILEREADERTEXT)
+MTEXTPATH = IO/File/Reader/Text
+MTEXTPARTS = BaseTextFileReader.hpp TextFileReader.hpp WTextFileReader.hpp TextFileReader.cpp WTextFileReader.cpp
+MTEXT = $(addprefix $(MTEXTPATH)/,$(MTEXTPARTS))
+# MIOFILEREADER = IO/FileReader/BaseFileReader.cpp IO/FileReader/*.hpp 
+# MIOFILEREADERTEXT = IO/FileReader/Text/TextFileReader.cpp IO/FileReader/Text/*.hpp 
+MODULES = $(MMAIN) $(MTEXT) #$(MIOFILEREADERTEXT)
 #### DO NOT TOUCH
 CPP = $(addprefix $(SRC_PATH),$(filter %.cpp,$(MODULES)))
 HEADERS = $(addprefix $(INCLUDE_PATH),$(filter %.hpp %.h,$(MODULES)))
@@ -159,10 +162,11 @@ OBJECTS = $(patsubst %.cpp,%.o,$(CPP))
 
 
 ## <Make main system>
-.PHONY: all clean target
+.PHONY: ss all clean target
+
 
 all: target
-
+	
 target: $(OBJECTS) | $(BUILD_DIR)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $(BUILD_DIR)/$(TARGET)  
 
