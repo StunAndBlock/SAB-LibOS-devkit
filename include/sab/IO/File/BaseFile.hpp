@@ -3,11 +3,16 @@
 #include "IO/Common.hpp"
 
 namespace sab::ioos {
-    template<typename CharT>
-    class BaseFile{
+    
+    template<typename CharT = char>
+    class BaseFile : public sab::status::Statusable {
         protected:
             std::basic_ifstream<CharT> file_;  
         public:
+            enum class Status {
+                OK,
+                CLOSE_ERROR
+            };
             virtual ~BaseFile() = default;
             BaseFile() = default;
             BaseFile(const BaseFile&) = delete;
@@ -16,7 +21,7 @@ namespace sab::ioos {
             BaseFile(BaseFile<CharT>&&) noexcept;
             BaseFile& operator=(BaseFile<CharT>&&) noexcept;
             virtual void open(const std::filesystem::path&) = 0;
-            virtual void close() = 0;
+            void close();
     }; 
 
     template<typename CharT>
@@ -35,10 +40,15 @@ namespace sab::ioos {
         return *this;
     }
 
-
-
-
-
-
+    template<typename CharT>
+    void BaseFile<CharT>::close(){
+        if (this->file_.is_open()){
+            this->file_.close();
+            this->setStatus(Status::OK);
+        } else {
+            this->setStatus(Status::CLOSE_ERROR);
+        }
+    }
 };
+
 #endif //!SAB_IO_BASEFILE_HPP_

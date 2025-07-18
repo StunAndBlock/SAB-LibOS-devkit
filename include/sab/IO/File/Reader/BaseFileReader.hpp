@@ -5,7 +5,7 @@
 
 namespace sab::ioos {
 
-    template<typename CharT>
+    template<typename CharT = char>
     class BaseFileReader : public BaseFile<CharT> {
 
         public:
@@ -17,36 +17,8 @@ namespace sab::ioos {
             virtual void read(CharT*, uint64_t) = 0;
             virtual void readLine(std::basic_string<CharT>&, CharT) = 0;
             virtual void readLine(std::basic_string<CharT>&) = 0;
-            virtual void close() override = 0;
-            // void open(const std::filesystem::path&) override {
-
-            // }
-            // void inv(){};
     };
 
-    // template<typename CharT>
-    // BaseFileReader<CharT>::BaseFileReader(BaseFileReader<CharT>&& other) noexcept
-    //     : BaseFile(std::move(source.file_)) {
-    //         this->status_ = source.status_;
-    //     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif //!SAB_IO_BASE_FILEREADER_HPP_

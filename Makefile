@@ -142,7 +142,8 @@ CFLAGS = -std=c++17 \
          -O0 -D_FORTIFY_SOURCE=2 -fstack-protector \
 		 -Wall -Wextra -Werror -Wshadow \
 		 $(CINCLUDE)
-LDFLAGS = 
+LDFLAGS = -L$(shell pwd)/ext/lib -lsab_status_dev -Wl,-rpath,$(shell pwd)/ext/lib/
+
 
 ## !<>
 

@@ -6,9 +6,9 @@
 int main(){
     sab::ioos::TextFileReader tfr;
     tfr.open("testfile");
-    if (tfr.getStatus() == sab::ioos::Status::BaseTextFileReader::OK) {
+    if (tfr.getStatus<sab::ioos::TextFileReader::Status>() == sab::ioos::TextFileReader::Status::OK) {
         std::cout << "yay";
-    } else if (tfr.getStatus() == sab::ioos::Status::BaseTextFileReader::OPEN_ERROR){
+    } else if (tfr.getStatus<sab::ioos::TextFileReader::Status>() == sab::ioos::TextFileReader::Status::OPEN_ERROR){
         std::cout << "yay but open error";
     }
 

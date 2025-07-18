@@ -11,19 +11,4 @@ namespace sab::ioos {
     };
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif //!SAB_IO_WTEXTFILRREADER_HPP
